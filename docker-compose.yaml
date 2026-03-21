@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  bridge:
+    build: ./bridge
+    ports:
+      - "3000:3000"
+    env_file: ./bridge/.env
+    restart: always
+
+  openclaw:
+    image: openclaw/gateway:latest
+    volumes:
+      - .:/workspace
+      - ~/.openclaw:/root/.openclaw
+    ports:
+      - "18789:18789"
+    environment:
+      - GATEWAY_MODE=remote
+    restart: always
