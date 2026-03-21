@@ -1,0 +1,12 @@
+{
+  "agents": {
+    "procrastination-partner": {
+      "tools": {
+        "exec": {
+          "mode": "allowlist",
+          "allowed_commands": ["ls", "cat", "grep", "mkdir", "touch"]
+        }
+      }
+    }
+  }
+}
