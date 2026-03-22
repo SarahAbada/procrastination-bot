@@ -22,10 +22,9 @@ BRIDGE_BASE_URL = os.getenv("BRIDGE_BASE_URL", "http://localhost:3000")
 BRIDGE_SECRET = os.getenv("BRIDGE_SECRET", "YOUR_BRIDGE_SECRET")
 
 # Path to a lecture PDF for the course
-# For hackathon demo, start with one lecture file that matches the assignment
+# start with one lecture file that matches the assignment
 LECTURE_PDF_PATH = os.getenv("LECTURE_PDF_PATH", "lecture.pdf")
 
-# Set to True only if your Google Calendar auth is already working
 USE_GOOGLE_CALENDAR = os.getenv("USE_GOOGLE_CALENDAR", "False").lower() == "true"
 
 # DISCORD SETUP
