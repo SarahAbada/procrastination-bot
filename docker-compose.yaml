@@ -1,44 +1,12 @@
-version: '3.8'
 services:
   bridge:
     build: ./bridge
     env_file: ./bridge/.env
-    # No ports exposed to host — openclaw reaches bridge via internal network only
     restart: always
     deploy:
       resources:
         limits:
           cpus: "0.5"
           memory: 256M
-    networks:
-      - internal
-
-  openclaw:
-    image: openclaw/gateway:latest
-    volumes:
-      # Your uOttawa files: read-only — kernel enforces this
-      - ~/Documents/uOttawa:/workspace/uOttawa:ro
-      # The only place the agent can write
-      - ./output:/workspace/output:rw
-      - ~/.openclaw:/root/.openclaw:ro
     ports:
-      - "18789:18789"
-    environment:
-      - GATEWAY_MODE=remote
-      - BRIDGE_URL=http://bridge:3000
-      - BRIDGE_SECRET=${BRIDGE_SECRET}  # passed from your shell env or a root .env
-    restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: 512M
-    networks:
-      - internal
-    depends_on:
-      - bridge
-
-networks:
-  internal:
-    driver: bridge
-    internal: true  # no external internet access from within this network
+      - "3000:3000"
