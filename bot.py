@@ -29,9 +29,7 @@ LECTURE_PDF_PATH = os.getenv("LECTURE_PDF_PATH", "lecture.pdf")
 USE_GOOGLE_CALENDAR = os.getenv("USE_GOOGLE_CALENDAR", "False").lower() == "true"
 
 
-# ========================
 # DISCORD SETUP
-# ========================
 
 intents = discord.Intents.default()
 message_content = getattr(intents, "message_content", None)
@@ -40,10 +38,7 @@ if message_content is not None:
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-
-# ========================
 # BRIGHTSPACE BRIDGE
-# ========================
 
 def fetch_deadlines():
     """
@@ -100,9 +95,7 @@ def pick_assignment(assignments):
     return valid[0]
 
 
-# ========================
 # HUGGING FACE LLM
-# ========================
 
 def query_huggingface(prompt):
     """
@@ -172,10 +165,7 @@ Use bullet points.
 """
     return query_huggingface(prompt)
 
-
-# ========================
 # GOOGLE CALENDAR
-# ========================
 
 def create_event(summary, start_time, end_time, description=""):
     try:
@@ -234,10 +224,7 @@ def create_schedule_events(title, due_value):
 
     return created
 
-
-# ========================
 # FORMATTING
-# ========================
 
 def safe_truncate(text, limit=1800):
     if not text:
@@ -262,10 +249,7 @@ def format_assignment_card(assignment):
         f"**Link:** {link}"
     )
 
-
-# ========================
 # MAIN DISCORD COMMAND
-# ========================
 
 @bot.event
 async def on_ready():
@@ -328,9 +312,7 @@ async def plan(ctx):
         )
 
 
-# ========================
 # SHOW ALL DEADLINES
-# ========================
 
 @bot.command()
 async def deadlines(ctx):
@@ -352,9 +334,4 @@ async def deadlines(ctx):
 
     await ctx.send("\n".join(lines))
 
-
-# ========================
-# RUN
-# ========================
-print(query_huggingface("Say hello"))
 bot.run(DISCORD_TOKEN)
