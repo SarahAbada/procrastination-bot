@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 #Import RAG pipeline
-#from tasks import process_assignment
+from tasks import process_assignment
 
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
@@ -257,12 +257,7 @@ async def on_ready():
 
 #replace w/ api call, shared file, and real function from teammate
 def get_rag_data(assignment):
-    return {
-        "title": assignment.get("title", "Untitled Assignment"),
-        "due": assignment.get("due", "Unknown due date"),
-        "assignment_text": f"This assignment is titled '{assignment.get('title', 'Untitled Assignment')}'.",
-        "relevant_lecture_content": "Lecture covered sorting algorithms like quicksort and mergesort."
-    }
+    return process_assignment(assignment, LECTURE_PDF_PATH)
 
 @bot.command()
 async def plan(ctx):
