@@ -5,8 +5,8 @@ import requests
 import discord
 from discord.ext import commands
 
-# Import RAG pipeline
-from tasks import process_assignment
+#Import RAG pipeline
+#from tasks import process_assignment
 
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
@@ -27,7 +27,6 @@ LECTURE_PDF_PATH = os.getenv("LECTURE_PDF_PATH", "lecture.pdf")
 
 # Set to True only if your Google Calendar auth is already working
 USE_GOOGLE_CALENDAR = os.getenv("USE_GOOGLE_CALENDAR", "False").lower() == "true"
-
 
 # DISCORD SETUP
 
@@ -249,12 +248,21 @@ def format_assignment_card(assignment):
         f"**Link:** {link}"
     )
 
+
 # MAIN DISCORD COMMAND
 
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
 
+#replace w/ api call, shared file, and real function from teammate
+def get_rag_data(assignment):
+    return {
+        "title": assignment.get("title", "Untitled Assignment"),
+        "due": assignment.get("due", "Unknown due date"),
+        "assignment_text": f"This assignment is titled '{assignment.get('title', 'Untitled Assignment')}'.",
+        "relevant_lecture_content": "Lecture covered sorting algorithms like quicksort and mergesort."
+    }
 
 @bot.command()
 async def plan(ctx):
@@ -278,13 +286,13 @@ async def plan(ctx):
     await ctx.send(format_assignment_card(assignment))
 
     try:
-        rag_data = process_assignment(assignment, LECTURE_PDF_PATH)
+        data = get_rag_data(assignment)
     except Exception as e:
         await ctx.send(f"RAG processing failed: {e}")
         return
 
     try:
-        plan_output = generate_plan(rag_data)
+        plan_output = generate_plan(data)
     except Exception as e:
         await ctx.send(f"Plan generation failed: {e}")
         return
@@ -293,7 +301,7 @@ async def plan(ctx):
     await ctx.send(safe_truncate(plan_output))
 
     if USE_GOOGLE_CALENDAR:
-        events = create_schedule_events(rag_data["title"], rag_data["due"])
+        events = create_schedule_events(data["title"], data["due"])
         if not events:
             await ctx.send("Could not create calendar events from the due date.")
             return
@@ -310,7 +318,6 @@ async def plan(ctx):
             "- 3 days before: Main implementation / drafting\n"
             "- 1 day before: Final polish and submission check"
         )
-
 
 # SHOW ALL DEADLINES
 
